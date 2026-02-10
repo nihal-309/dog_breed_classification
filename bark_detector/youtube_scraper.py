@@ -557,6 +557,8 @@ def batch_scrape(breeds=None, max_videos_per_breed=20, target_clips_per_breed=20
 # CLI
 # ============================================================================
 def main():
+    global ACOUSTIC_THRESHOLD, CNN_THRESHOLD
+    
     parser = argparse.ArgumentParser(description="YouTube Bark Audio Scraper")
     parser.add_argument("--breed", type=str, default=None,
                         help="Single breed to scrape (e.g., 'beagle', 'labrador_retriever')")
@@ -590,8 +592,7 @@ def main():
         print("Install it with: pip install yt-dlp")
         sys.exit(1)
 
-    # Update thresholds
-    global ACOUSTIC_THRESHOLD, CNN_THRESHOLD
+    # Update thresholds from args
     ACOUSTIC_THRESHOLD = args.acoustic_threshold
     CNN_THRESHOLD = args.cnn_threshold
 
