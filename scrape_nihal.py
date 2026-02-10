@@ -1,7 +1,7 @@
 """
-YouTube Bark Scraper - NIHAL's Breeds (1-10)
+YouTube Bark Scraper - NIHAL's Breeds (28)
 =============================================
-Run this script to scrape bark audio for your assigned 10 breeds.
+Run this script to scrape bark audio for your assigned 28 breeds.
 
 Usage:
     python scrape_nihal.py
@@ -19,19 +19,28 @@ from bark_detector.youtube_scraper import scrape_breed, check_ytdlp
 from bark_detector.model import BarkDetector
 
 # ============================================================================
-# NIHAL'S 10 BREEDS
+# NIHAL'S 28 BREEDS (ordered by fused dataset size)
 # ============================================================================
 MY_BREEDS = [
-    "pug",
-    "golden_retriever",
-    "bulldog",
-    "beagle",
-    "poodle",
-    "rottweiler",
-    "yorkshire_terrier",
-    "boxer",
-    "dachshund",
-    "pembroke_welsh_corgi",
+    # --- 18 new from fused dataset ---
+    "japanese_spaniel",        # fused: 417 (Japanese Chin)
+    "bluetick",                # fused: 232 (Bluetick Coonhound)
+    "komondor",                # fused: 212
+    "scottish_deerhound",      # fused: 164
+    "tibetan_terrier",         # fused: 161
+    "leonberger",              # fused: 160
+    "australian_terrier",      # fused: 156
+    "silky_terrier",           # fused: 145
+    "italian_greyhound",       # fused: 138
+    "malamute",                # fused: 133 (Alaskan Malamute)
+    "border_terrier",          # fused: 133
+    "cockapoo",                # fused: 128
+    "gordon_setter",           # fused: 121
+    "kelpie",                  # fused: 121 (Australian Kelpie)
+    "briard",                  # fused: 120
+    "brittany_spaniel",        # fused: 119
+    "kerry_blue_terrier",      # fused: 113
+    "old_english_sheepdog",    # fused: 108
 ]
 
 BARK_MODEL_PATH = Path(__file__).parent / "outputs" / "bark_detector_best.pth"
@@ -39,7 +48,7 @@ BARK_MODEL_PATH = Path(__file__).parent / "outputs" / "bark_detector_best.pth"
 
 def main():
     import argparse
-    parser = argparse.ArgumentParser(description="Nihal's Bark Scraper (10 breeds)")
+    parser = argparse.ArgumentParser(description="Nihal's Bark Scraper (28 breeds)")
     parser.add_argument("--breed", type=str, default=None,
                         help="Scrape single breed (e.g., 'beagle')")
     parser.add_argument("--max-videos", type=int, default=20,
