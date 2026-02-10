@@ -1,7 +1,7 @@
 """
-YouTube Bark Scraper - UTTAM's Breeds (11-20)
-==============================================
-Run this script to scrape bark audio for your assigned 10 breeds.
+YouTube Bark Scraper - UTTAM's Breeds (28)
+============================================
+Run this script to scrape bark audio for your assigned 28 breeds.
 
 Usage:
     python scrape_uttam.py
@@ -19,19 +19,40 @@ from bark_detector.youtube_scraper import scrape_breed, check_ytdlp
 from bark_detector.model import BarkDetector
 
 # ============================================================================
-# UTTAM'S 10 BREEDS
+# UTTAM'S 28 BREEDS (ordered by fused dataset size)
 # ============================================================================
 MY_BREEDS = [
-    "doberman",
-    "great_dane",
-    "miniature_schnauzer",
-    "australian_shepherd",
-    "cavalier_king_charles",
-    "shih_tzu",
-    "boston_terrier",
-    "pomeranian",
-    "havanese",
-    "english_springer_spaniel",
+    # --- Original 10 ---
+    "pomeranian",              # fused: 473
+    "shih_tzu",                # fused: 309
+    "great_dane",              # fused: 245
+    "doberman",                # fused: 229
+    "havanese",                # fused: 164
+    "english_springer_spaniel",# close to fused: english_springer (123)
+    "miniature_schnauzer",     # fused: 98
+    "boston_terrier",          # fused: 79
+    "australian_shepherd",     # popular breed, good YouTube presence
+    "cavalier_king_charles",   # popular breed, good YouTube presence
+    # --- 3 old breeds (re-scrape) ---
+    "chihuahua",               # fused: 384
+    "german_shepherd",         # fused: 96
+    "labrador",                # fused: 189
+    # --- 15 new from fused dataset ---
+    "basset",                  # fused: 439
+    "newfoundland",            # fused: 384
+    "samoyed",                 # fused: 328
+    "miniature_pinscher",      # fused: 304
+    "great_pyrenees",          # fused: 296
+    "lhasa",                   # fused: 295 (Lhasa Apso)
+    "english_setter",          # fused: 286
+    "keeshond",                # fused: 280
+    "soft_coated_wheaten_terrier",  # fused: 280
+    "staffordshire_bullterrier",    # fused: 273
+    "airedale",                # fused: 264 (Airedale Terrier)
+    "chow",                    # fused: 258 (Chow Chow)
+    "german_short_haired_pointer", # fused: 256
+    "bloodhound",              # fused: 252
+    "irish_wolfhound",         # fused: 245
 ]
 
 BARK_MODEL_PATH = Path(__file__).parent / "outputs" / "bark_detector_best.pth"
@@ -39,7 +60,7 @@ BARK_MODEL_PATH = Path(__file__).parent / "outputs" / "bark_detector_best.pth"
 
 def main():
     import argparse
-    parser = argparse.ArgumentParser(description="Uttam's Bark Scraper (10 breeds)")
+    parser = argparse.ArgumentParser(description="Uttam's Bark Scraper (28 breeds)")
     parser.add_argument("--breed", type=str, default=None,
                         help="Scrape single breed (e.g., 'doberman')")
     parser.add_argument("--max-videos", type=int, default=20,
