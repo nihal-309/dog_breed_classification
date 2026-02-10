@@ -2,9 +2,6 @@
 torch>=2.0.0
 torchvision>=0.15.0
 
-# Alternative: TensorFlow/Keras
-# tensorflow>=2.12.0
-
 # Data Processing
 numpy>=1.24.0
 pandas>=2.0.0
@@ -19,12 +16,11 @@ albumentations>=1.3.0
 matplotlib>=3.7.0
 seaborn>=0.12.0
 
-# Jupyter Notebooks
-jupyter>=1.0.0
-ipykernel>=6.22.0
+# Jupyter Notebooks (optional)
+# jupyter>=1.0.0
+# ipykernel>=6.22.0
 
 # Dataset Download
-kaggle>=1.5.13
 requests>=2.28.0
 tqdm>=4.65.0
 
@@ -36,6 +32,7 @@ scipy>=1.10.0
 
 # YouTube Scraping (bark detector pipeline)
 yt-dlp>=2023.10.0
+imageio-ffmpeg>=0.5.0  # Bundles ffmpeg binary for audio conversion
 
 # Audio Playback (optional, for manual validation)
 # sounddevice>=0.4.6

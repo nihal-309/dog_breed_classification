@@ -50,7 +50,7 @@ Each breed's clips will be in `data/breed_audio/<breed_name>/`.
 
 | Person | Breeds (10 each) |
 |--------|-------------------|
-| **Nihal** | labrador_retriever, golden_retriever, bulldog, beagle, poodle, rottweiler, yorkshire_terrier, boxer, dachshund, pembroke_welsh_corgi |
+| **Nihal** | pug, golden_retriever, bulldog, beagle, poodle, rottweiler, yorkshire_terrier, boxer, dachshund, pembroke_welsh_corgi |
 | **Uttam** | doberman, great_dane, miniature_schnauzer, australian_shepherd, cavalier_king_charles, shih_tzu, boston_terrier, pomeranian, havanese, english_springer_spaniel |
 | **Lihith** | shetland_sheepdog, bernese_mountain_dog, border_collie, cocker_spaniel, vizsla, french_bulldog, maltese, saint_bernard, akita, dalmatian |
 

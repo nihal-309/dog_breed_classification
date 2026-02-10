@@ -22,7 +22,7 @@ from bark_detector.model import BarkDetector
 # NIHAL'S 10 BREEDS
 # ============================================================================
 MY_BREEDS = [
-    "labrador_retriever",
+    "pug",
     "golden_retriever",
     "bulldog",
     "beagle",

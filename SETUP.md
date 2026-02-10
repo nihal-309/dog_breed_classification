@@ -36,12 +36,13 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```powershell
 pip install --upgrade pip
 pip install -r requirements.txt
-pip install yt-dlp scipy
 ```
 
 This installs:
 - `torch` — deep learning framework
 - `numpy`, `scipy` — audio processing
+- `yt-dlp` — YouTube audio downloading
+- `imageio-ffmpeg` — bundled ffmpeg binary for audio conversion
 - `matplotlib` — visualization
 - `scikit-learn` — ML utilities
 - `yt-dlp` — YouTube downloader

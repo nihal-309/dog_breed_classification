@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dog Breed Classification - System Diagram</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 60px;
+            color: #2c3e50;
+            font-weight: 300;
+            letter-spacing: -1px;
+        }
+
+        .overview {
+            background: #f5f5f5;
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 60px;
+            border-left: 4px solid #000000;
+        }
+
+        .overview h2 {
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .overview ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .overview li {
+            margin: 15px 0;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.6;
+            color: #34495e;
+        }
+
+        .overview li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #000000;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .diagram-wrapper {
+            position: relative;
+            margin: 40px 0;
+            padding: 20px;
+            min-height: auto;
+        }
+
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            display: none;
+        }
+
+        .diagram {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .flow-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .component {
+            background: #000000;
+            color: white;
+            padding: 20px 35px;
+            border-radius: 5px;
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+            text-align: center;
+            min-width: 200px;
+            flex-shrink: 0;
+        }
+
+        .component:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .arrow {
+            font-size: 30px;
+            color: #000000;
+            flex-shrink: 0;
+        }
+
+        .arrow-down {
+            display: none !important;
+        }
+
+        .logging-box {
+            margin-top: 20px;
+            margin-left: 0;
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>System Diagram</h1>
+
+        <div class="diagram-wrapper">
+            <svg preserveAspectRatio="none" viewBox="0 0 100 450">
+                <!-- First wrap arrow -->
+                <path d="M 5 30 L 5 100 Q 5 120 15 120 L 85 120 Q 95 120 95 140" stroke="#000000" stroke-width="2"
+                    fill="none" marker-end="url(#arrowhead)" />
+
+                <!-- Second wrap arrow -->
+                <path d="M 5 210 L 5 280 Q 5 300 15 300 L 85 300 Q 95 300 95 320" stroke="#000000" stroke-width="2"
+                    fill="none" marker-end="url(#arrowhead)" />
+
+                <!-- Arrow marker definition -->
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                        <polygon points="0 0, 10 3, 0 6" fill="#000000" />
+                    </marker>
+                </defs>
+            </svg>
+
+            <div class="diagram">
+                <!-- Row 1 -->
+                <div class="flow-row">
+                    <div class="flow-row">
+                        <div class="component">User Image Upload</div>
+                        <span class="arrow">→</span>
+                        <div class="component">Image Validation<br>(Format, Size)</div>
+                        <span class="arrow">→</span>
+                        <div class="component">Preprocessing<br>(Resize, Normalize)</div>
+                    </div>
+
+                    <!-- Row 2 -->
+                    <div class="flow-row">
+                        <div class="component">Model Selection<br>(ResNet50/MobileNetV2)</div>
+                        <span class="arrow">→</span>
+                        <div class="component">CNN Inference<br>(Breed Classification)</div>
+                        <span class="arrow">→</span>
+                        <div class="component">Confidence Scoring<br>(Top-K Predictions)</div>
+                    </div>
+
+                    <!-- Row 3 -->
+                    <div class="flow-row">
+                        <div class="component">Behavior Database<br>Lookup (AKC Data)</div>
+                        <span class="arrow">→</span>
+                        <div class="component">Response Builder<br>(JSON Formatter)</div>
+                        <span class="arrow">→</span>
+                        <div class="component">Final Response<br>(Breed + Traits)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="component logging-box">Logging and Performance Metrics</div>
+
+            <div class="overview">
+                <h2>SYSTEM OVERVIEW</h2>
+                <ul>
+                    <li><strong>Multi-source Data Fusion:</strong> Aggregate and harmonize dog breed images from
+                        multiple datasets (Stanford Dogs, Oxford Pets, custom datasets) to create a comprehensive
+                        training corpus with proper validation splits. This fusion approach ensures model robustness
+                        by exposing it to diverse image styles, lighting conditions, and angles, reducing overfitting
+                        and improving generalization across real-world scenarios.</li>
+
+                    <li><strong>Deep Learning Classification Pipeline:</strong> Employ transfer learning with
+                        pre-trained CNNs (ResNet50, MobileNetV2) fine-tuned on fused dataset to achieve robust breed
+                        identification across 120+ dog breeds. The dual-model approach balances accuracy with inference
+                        speed, allowing users to select based on their performance requirements while maintaining
+                        consistent classification quality.</li>
+
+                    <li><strong>Web-based Inference Service:</strong> Provide real-time breed prediction through a Flask
+                        API with image preprocessing, model inference, and confidence scoring integrated with behavioral
+                        trait lookup. The service automatically retrieves personality characteristics, size information,
+                        energy levels, and care requirements from the AKC database, enriching predictions with actionable
+                        insights for breed selection and understanding.</li>
+
+                    <li><strong>Performance Monitoring:</strong> Track model accuracy, inference latency, and prediction
+                        confidence distributions through comprehensive logging and metrics collection. Detailed audit trails
+                        capture user interactions, model predictions, and system health metrics, enabling continuous
+                        improvement and identifying performance bottlenecks or edge cases.</li>
+                </ul>
+            </div>
+        </div>
+</body>
+
+</html>
