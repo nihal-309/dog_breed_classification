@@ -120,9 +120,34 @@ def search_youtube(query, max_results=10):
         return []
 
 
-def download_audio(url, output_path, max_duration=120):
+def _find_ffmpeg():
+    """Find ffmpeg binary - check PATH first, then imageio_ffmpeg bundle."""
+    # Check if ffmpeg is on PATH
+    try:
+        r = subprocess.run(["ffmpeg", "-version"], capture_output=True, timeout=5)
+        if r.returncode == 0:
+            return "ffmpeg"
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        pass
+    
+    # Fall back to imageio-ffmpeg bundled binary
+    try:
+        import imageio_ffmpeg
+        return imageio_ffmpeg.get_ffmpeg_exe()
+    except ImportError:
+        pass
+    
+    return None
+
+
+# Cache the ffmpeg path
+_FFMPEG_PATH = _find_ffmpeg()
+
+
+def download_audio(url, output_path, max_duration=300):
     """
     Download audio from a YouTube video as WAV.
+    Uses a two-step process: download best audio, then convert to WAV with ffmpeg.
     
     Args:
         url: YouTube video URL
@@ -133,32 +158,62 @@ def download_audio(url, output_path, max_duration=120):
         True if successful, False otherwise
     """
     try:
+        actual_path = Path(str(output_path))
+        out_stem = actual_path.with_suffix("")
+        
+        # Step 1: Download audio in its native format (no conversion)
+        raw_template = str(out_stem) + "_raw.%(ext)s"
+        
         cmd = [
             "yt-dlp",
             url,
             "--extract-audio",
-            "--audio-format", "wav",
-            "--audio-quality", "0",
-            "--output", str(output_path),
+            "--output", raw_template,
             "--no-playlist",
             "--no-warnings",
-            "--quiet",
-            # Limit duration to avoid downloading hour-long compilations
-            "--match-filter", f"duration<={max_duration}",
-            # Prefer lower quality (faster download, we only need audio)
-            "--format", "worstaudio/worst",
         ]
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
         
-        # yt-dlp may append .wav to the output path
-        actual_path = Path(str(output_path))
-        if not actual_path.exists():
-            # Try with .wav extension added
-            wav_path = Path(str(output_path) + ".wav")
-            if wav_path.exists():
-                wav_path.rename(actual_path)
-
-        return actual_path.exists()
+        # Find the downloaded raw file
+        parent = actual_path.parent
+        raw_file = None
+        for f in parent.iterdir():
+            if f.stem == f"{out_stem.name}_raw":
+                raw_file = f
+                break
+        
+        if raw_file is None:
+            if result.stderr:
+                print(f"      yt-dlp error: {result.stderr.strip()[:100]}")
+            return False
+        
+        # Step 2: Convert to WAV using ffmpeg
+        if _FFMPEG_PATH is None:
+            print("      ERROR: ffmpeg not found. Install ffmpeg or: pip install imageio-ffmpeg")
+            raw_file.unlink(missing_ok=True)
+            return False
+        
+        convert_cmd = [
+            _FFMPEG_PATH,
+            "-i", str(raw_file),
+            "-ar", "16000",      # 16kHz sample rate
+            "-ac", "1",          # mono
+            "-sample_fmt", "s16", # 16-bit PCM
+            str(actual_path),
+            "-y",                # overwrite
+            "-loglevel", "error",
+        ]
+        conv_result = subprocess.run(convert_cmd, capture_output=True, text=True, timeout=120)
+        
+        # Clean up raw file
+        raw_file.unlink(missing_ok=True)
+        
+        if actual_path.exists() and actual_path.stat().st_size > 0:
+            return True
+        
+        if conv_result.stderr:
+            print(f"      ffmpeg error: {conv_result.stderr.strip()[:100]}")
+        return False
 
     except subprocess.TimeoutExpired:
         print(f"    Download timed out: {url}")
@@ -416,8 +471,8 @@ def scrape_breed(breed, max_videos=20, bark_detector=None,
                 if duration < 5:
                     print(f"      SKIP: Too short")
                     continue
-                if duration > 300:
-                    print(f"      SKIP: Too long (>5 min)")
+                if duration > 600:
+                    print(f"      SKIP: Too long (>10 min)")
                     continue
 
             # Download
